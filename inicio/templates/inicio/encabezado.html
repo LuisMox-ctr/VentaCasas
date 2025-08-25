@@ -1,0 +1,170 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+       {% bootstrap_css %}
+        {% bootstrap_javascript %}
+    </head>
+    <body class="d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'principal' %}">Inicio</a>
+          <img src="{% static './../../static/images/logo.png' %}" alt="Inicio" class="icono-nav">
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'promociones' %}">Promociones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'casas_destacadas' %}">Destacadas</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+    <div class="d-flex">
+        {% if user.is_authenticated %}
+            <span class="navbar-text me-3">
+                Hola, {{ user.get_username }}!
+            </span>
+            <a href="{% url 'logout' %}" class="btn btn-outline-danger">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+            </a>
+            <a href="{% url 'register' %}" class="btn btn-primary">
+                <i class="bi bi-person-plus"></i> Registrarse
+            </a>
+        {% endif %}
+</nav>
+<main class="flex-grow-1">
+        {% block contenido %}
+
+        {%endblock %}
+</main>
+<footer class="bg-dark text-white mt-5">
+            <!-- Sección principal del footer -->
+            <div class="container py-5">
+                <div class="row">
+                    <!-- Información de la empresa -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <h5 class="text-primary mb-3">Comprame</h5>
+                        <p class="mb-3">
+                            Tu mejor opción para encontrar la casa de tus sueños. 
+                            Más de 10 años de experiencia en el mercado inmobiliario.
+                        </p>
+                        <div class="mb-3">
+                            <h6 class="text-primary">Ubicación:</h6>
+                            <small>Morelia, Michoacán, México</small>
+                        </div>
+                    </div>
+
+                    <!-- Enlaces rápidos -->
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <h5 class="text-primary mb-3">Enlaces Rápidos</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="{% url 'principal' %}" class="text-white-50 text-decoration-none">
+                                    Inicio
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="{% url 'casas_destacadas' %}" class="text-white-50 text-decoration-none">
+                                    Casas Destacadas
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="{% url 'promociones' %}" class="text-white-50 text-decoration-none">
+                                    Promociones
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Redes sociales y horarios -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <h5 class="text-primary mb-3">Síguenos</h5>
+                        <div class="d-flex mb-4">
+                            <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                                <i class="bi bi-facebook"></i> Facebook
+                            </a>
+                            <a href="#" class="btn btn-outline-success btn-sm me-2">
+                                <i class="bi bi-whatsapp"></i> WhatsApp
+                            </a>
+                            <a href="#" class="btn btn-outline-info btn-sm">
+                                <i class="bi bi-instagram"></i> Instagram
+                            </a>
+                        </div>
+
+            <!-- Separador -->
+            <hr class="border-secondary">
+
+            <!-- Footer bottom -->
+            <div class="container py-4">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <small class="text-white-50">
+                            © 2025 Comprame. Todos los derechos reservados.
+                        </small>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <small class="text-white-50">
+                            <a href="#" class="text-white-50 text-decoration-none me-3">Política de Privacidad</a>
+                            <a href="#" class="text-white-50 text-decoration-none me-3">Términos de Servicio</a>
+                            <a href="#" class="text-white-50 text-decoration-none">Aviso Legal</a>
+                        </small>
+                    </div>
+                </div>
+            <!-- Botón scroll to top -->
+            <button id="scrollToTop" class="btn btn-primary position-fixed bottom-0 end-0 m-4 rounded-circle d-none" 
+                    style="width: 50px; height: 50px; z-index: 1000;">
+                <i class="bi bi-arrow-up">⬆️</i>
+            </button>
+        </footer>
+
+        <!-- JavaScript para el botón scroll to top -->
+        <script>
+            // Botón scroll to top
+            window.addEventListener('scroll', function() {
+                const scrollButton = document.getElementById('scrollToTop');
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.remove('d-none');
+                } else {
+                    scrollButton.classList.add('d-none');
+                }
+            });
+
+            document.getElementById('scrollToTop').addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Newsletter subscription (puedes conectarlo con tu backend)
+            document.querySelector('button[type="button"]').addEventListener('click', function() {
+                const email = this.previousElementSibling.value;
+                if (email) {
+                    alert('¡Gracias por suscribirte! Pronto recibirás nuestras mejores ofertas.');
+                    this.previousElementSibling.value = '';
+                } else {
+                    alert('Por favor, ingresa un email válido.');
+                }
+            });
+        </script>
+    </body>
+</html>

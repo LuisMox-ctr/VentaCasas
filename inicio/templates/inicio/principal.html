@@ -1,0 +1,252 @@
+{% extends 'inicio/encabezado.html' %}
+
+{% block contenido %}
+<!-- Carousel de Casas Destacadas -->
+ <style>
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 5%;
+    background: rgba(255, 255, 255, 0.49);
+    border-radius: 0 8px 8px 0;
+  }
+  
+  .carousel-control-next {
+    border-radius: 8px 0 0 8px;
+  }
+  
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-size: 24px 24px;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  .carousel-control-prev:hover,
+  .carousel-control-next:hover {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .carousel-control-prev:hover .carousel-control-prev-icon,
+  .carousel-control-next:hover .carousel-control-next-icon {
+    background-color: #ffffff;
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+  }
+  
+  .carousel-indicators [data-bs-target] {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 2px solid rgba(0, 0, 0, 0.3);
+  }
+  
+  .carousel-indicators .active {
+    background-color: #0d6efd;
+    border-color: #ffffff;
+  }
+</style>
+{% if casas_destacadas %}
+<div id="carouselCasasDestacadas" class="carousel carousel-dark slide mb-5" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    {% for casa in casas_destacadas %}
+      <button type="button" data-bs-target="#carouselCasasDestacadas" 
+              data-bs-slide-to="{{ forloop.counter0 }}" 
+              {% if forloop.first %}class="active" aria-current="true"{% endif %} 
+              aria-label="Casa {{ forloop.counter }}"></button>
+    {% endfor %}
+  </div>
+  
+  <div class="carousel-inner">
+    {% for casa in casas_destacadas %}
+    <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="4000">
+      <div class="position-relative">
+        <img src="{{ casa.imagen.url }}" class="d-block w-100" alt="{{ casa.nombre }}" 
+             style="height: 500px; object-fit: cover; filter: brightness(0.7);">
+        
+        <!-- Overlay con información de la casa -->
+        <div class="carousel-caption d-none d-md-block">
+          <div class="bg-dark bg-opacity-75 p-4 rounded">
+            <h2 class="text-white"> {{ casa.nombre }}</h2>
+            <p class="fs-5 text-white mb-3">
+              <strong>${{ casa.costo }}</strong> • {{ casa.numhabitaciones }} habitaciones
+            </p>
+            <p class="text-white">{{ casa.direccion }}</p>
+            <div class="mt-3">
+              <a href="{% url 'vercasa' casa.id %}" class="btn btn-primary btn-lg me-2">
+                Ver detalles
+              </a>
+              <a href="{% url 'casas_destacadas' %}" class="btn btn-outline-light btn-lg">
+                Ver todas las destacadas
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Etiqueta de "Destacada" -->
+        <div class="position-absolute top-0 start-0 m-3">
+          <span class="badge bg-warning text-dark fs-6">DESTACADA</span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselCasasDestacadas" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselCasasDestacadas" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+{% endif %}
+
+<!-- Sección de Promociones -->
+{% if casas_promocion %}
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="text-danger">¡PROMOCIONES ESPECIALES!</h2>
+            <p class="text-muted">Ofertas por tiempo limitado - ¡No te las pierdas!</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% for casa in casas_promocion %}
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 border-danger shadow">
+                <!-- Badge de promoción -->
+                <div class="position-relative">
+                    <img src="{{casa.imagen.url}}" class="card-img-top" alt="{{casa.nombre}}"
+                         style="height: 200px; object-fit: cover;">
+                    
+                    {% if casa.descuento_porcentaje %}
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-danger fs-6">-{{casa.descuento_porcentaje}}%</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="position-absolute top-0 start-0 m-2">
+                        <span class="badge bg-warning text-dark">🔥 PROMOCIÓN</span>
+                    </div>
+                </div>
+                
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{casa.nombre}}</h5>
+                    
+                    <!-- Precios -->
+                    <div class="mb-2">
+                        {% if casa.precio_promocional %}
+                            <span class="text-decoration-line-through text-muted">${{casa.costo}}</span>
+                            <h4 class="text-danger mb-0">${{casa.precio_promocional}}</h4>
+                        {% else %}
+                            <h4 class="text-danger mb-0">${{casa.costo}}</h4>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Información básica -->
+                    <small class="text-muted mb-2">
+                        {{casa.direccion|truncatewords:3}}<br>
+                        {{casa.numhabitaciones}} habitaciones
+                    </small>
+                    
+                    <!-- Descripción de promoción -->
+                    {% if casa.descripcion_promocion %}
+                    <p class="card-text text-danger">
+                        <small><strong>{{casa.descripcion_promocion|truncatewords:8}}</strong></small>
+                    </p>
+                    {% endif %}
+                    
+                    <!-- Fecha límite -->
+                    {% if casa.fecha_fin_promocion %}
+                    <small class="text-muted mb-3">
+                        Válido hasta: {{casa.fecha_fin_promocion}}
+                    </small>
+                    {% endif %}
+                    
+                    <!-- Botón -->
+                    <div class="mt-auto">
+                        <a href="{% url 'vercasa' casa.id %}" class="btn btn-danger w-100">
+                            ¡Aprovecha la oferta!
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <div class="alert alert-danger">
+                <h5 class="alert-heading">¡Ofertas por tiempo limitado!</h5>
+                <p class="mb-2">No dejes pasar estas oportunidades únicas. Las promociones están sujetas a disponibilidad.</p>
+                <a href="{% url 'promociones' %}" class="btn btn-outline-danger">Ver todas las promociones</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Título de sección -->
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-12 text-center">
+      <h2>Todas nuestras propiedades</h2>
+      <p class="text-muted">Encuentra la casa de tus sueños</p>
+    </div>
+  </div>
+</div>
+
+<!-- Contenido principal - Lista de todas las casas -->
+<div class="container">
+  <div class="row">
+    {% for casa in casas %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100" style="width: 90%;">
+        <img src="{{casa.imagen.url}}" class="card-img-top rounded" alt="{{casa.nombre}}"
+             style="height: 200px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">
+            <span class="text-muted">Clave:</span> {{casa.clave}}
+          </h5>
+          <p class="card-text">
+            <span class="text-muted">Nombre:</span> {{casa.nombre}}
+          </p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="text-muted">Precio:</span> 
+            <strong class="text-success">${{casa.costo}}</strong>
+          </li>
+          <li class="list-group-item">
+            <span class="text-muted">Dirección:</span> {{casa.direccion}}
+          </li>
+          <li class="list-group-item">
+            <span class="text-muted">Habitaciones:</span> {{casa.numhabitaciones}}
+          </li>
+          <li class="list-group-item">
+            <span class="text-muted">Servicios:</span> {{casa.servicios}}
+          </li>
+        </ul>
+        <div class="card-body">
+          <a href="{% url 'vercasa' casa.id %}" class="btn btn-primary">Ver detalles</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info text-center">
+        <h4>No hay casas disponibles</h4>
+        <p>Por favor, regresa más tarde.</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

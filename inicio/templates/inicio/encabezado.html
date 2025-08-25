@@ -1,5 +1,4 @@
 {% load django_bootstrap5 %}
-{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,12 +8,13 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        {% load static %}
        {% bootstrap_css %}
         {% bootstrap_javascript %}
     </head>
     <body class="d-flex flex-column min-vh-100">
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-gradient text-dark" style="background-color: #d1750d9d;">
   <div class="container-fluid">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -22,8 +22,9 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'principal' %}">Inicio</a>
-          <img src="{% static './../../static/images/logo.png' %}" alt="Inicio" class="icono-nav">
+          <a class="navbar-brand d-flex align-items-center" href="{% url 'principal' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Inicio" class="icono-nav" style="width: 100px; height: auto; margin-right: 8px;">
+    </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'promociones' %}">Promociones</a>
@@ -32,24 +33,28 @@
           <a class="nav-link" href="{% url 'casas_destacadas' %}">Destacadas</a>
         </li>
       </ul>
+      <ul class="navbar-nav ms-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="#">Hola, {{ user.username }}</a>
+          </li>
+          <form method="post" action="{% url 'logout' %}" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit"
+                    <i class="nav-link"></i> Cerrar sesión
+                  </button>
+                </form>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Registrarse</a>
+          </li>
+        {% endif %}
+      </ul>
     </div>
   </div>
-    <div class="d-flex">
-        {% if user.is_authenticated %}
-            <span class="navbar-text me-3">
-                Hola, {{ user.get_username }}!
-            </span>
-            <a href="{% url 'logout' %}" class="btn btn-outline-danger">
-                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-            </a>
-        {% else %}
-            <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">
-                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-            </a>
-            <a href="{% url 'register' %}" class="btn btn-primary">
-                <i class="bi bi-person-plus"></i> Registrarse
-            </a>
-        {% endif %}
 </nav>
 <main class="flex-grow-1">
         {% block contenido %}

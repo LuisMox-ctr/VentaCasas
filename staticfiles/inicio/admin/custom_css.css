@@ -1,0 +1,4 @@
+/* Cambiar colores principales */
+.main-header .navbar {
+    background-color: rgb(255, 0, 0) !important;
+}

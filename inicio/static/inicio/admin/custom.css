@@ -1,0 +1,70 @@
+/* ===================== */
+/* 🎨 Personalización de Jazzmin Admin */
+/* ===================== */
+
+/* ====== 1. Navbar ====== */
+.navbar-info {
+    background-color: #d1750d9d !important;  /* Naranja oscuro */
+    font-weight: bold;
+}
+
+/* Logo/brand del admin */
+.navbar .brand-link {
+    font-size: 1.3rem;
+    color: #FACC15 !important;  /* Amarillo */
+}
+
+/* ====== 2. Sidebar ====== */
+.sidebar-dark-info {
+    background-color: #4c8a44 !important; /* Gris oscuro */
+}
+
+/* Links del sidebar */
+.sidebar .nav-link {
+    color: #ffffff !important;  /* Gris claro */
+}
+
+.sidebar .nav-link.active {
+    background-color: #d1750d9d !important;  /* Naranja oscuro */
+    color: #ffffff !important;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+/* ====== 3. Tablas ====== */
+.table th {
+    background-color: #b9c0c09d !important;  /* Azul */
+    color: rgb(0, 0, 0) !important;
+    font-weight: bold;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* ====== 4. Botones ====== */
+.btn-primary {
+    background-color: #2563EB !important; /* Azul */
+    border-color: #2563EB !important;
+}
+
+.btn-danger {
+    background-color: #DC2626 !important; /* Rojo */
+    border-color: #DC2626 !important;
+}
+
+.btn-success {
+    background-color: #16A34A !important; /* Verde */
+    border-color: #16A34A !important;
+}
+
+/* ====== 5. Fuente general ====== */
+body {
+    background-color: #16A34A;
+    font-family: 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 15px;
+}
+
+.navbar {
+    background-color: #d1760dc5 !important;
+}

@@ -4,7 +4,7 @@ from .models import Casas, Opiniones, Contacto
 # Register your models here.
 @admin.register(Casas)
 class CasaAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'clave', 'costo', 'precio_promocional', 'numhabitaciones', 'destacada', 'en_promocion', 'fecha_fin_promocion')
+    list_display = ('nombre', 'clave', 'costo', 'precio_promocional', 'numhabitaciones', 'direccion', 'destacada', 'en_promocion', 'fecha_fin_promocion', 'imagen',)
     search_fields = ('nombre', 'direccion')
     list_filter = ('destacada', 'en_promocion', 'numhabitaciones', 'fecha_fin_promocion')
     list_editable = ('destacada', 'en_promocion', 'precio_promocional')

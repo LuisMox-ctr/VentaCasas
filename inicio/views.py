@@ -24,13 +24,11 @@ def register(request):
 # Create your views here.
 def principal(request):
     casas = Casas.objects.all()
-    # Obtener casas destacadas para el carousel
     casas_destacadas = Casas.objects.filter(destacada=True)[:3]
-    # Obtener casas en promoción (promociones vigentes)
     casas_promocion = Casas.objects.filter(
         en_promocion=True,
         fecha_fin_promocion__gte=timezone.now().date()
-    )[:4]  # Mostrar máximo 4 promociones
+    )[:4]
     
     context = {
         'casas': casas,
@@ -55,19 +53,16 @@ def vercasa(request, casa_id):
     
     # Manejar formularios POST
     if request.method == 'POST':
-        # Verificar qué formulario se envió
         if 'opinion_form' in request.POST:
-            # Verificar si el usuario está autenticado para agregar opiniones
             if not request.user.is_authenticated:
                 messages.error(request, 'Debes iniciar sesión para agregar una opinión.')
                 return redirect('login')
             
-            # Procesar formulario de opiniones
             opinion_form = OpinionesForm(request.POST, request.FILES)
             if opinion_form.is_valid():
                 opinion = opinion_form.save(commit=False)
                 opinion.casa = casa  
-                opinion.usuario = request.user  # Asignar el usuario autenticado
+                opinion.usuario = request.user
                 opinion.save()
                 
                 messages.success(request, 'Tu opinión ha sido enviada correctamente.')
